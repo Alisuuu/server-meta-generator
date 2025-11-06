@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const TMDB_API_KEY = '5e5da432e96174227b25086fe8637985'; // Replace with your actual TMDB API Key
+const TMDB_API_KEY = process.env.TMDB_API_KEY; // Use environment variable
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.themoviedb.org/t/p/';
 
@@ -17,7 +17,7 @@ app.get('/share', async (req, res) => {
 
     if (!id || !type) {
         // If no ID or type, redirect to the main app or show an error
-        return res.redirect('/index.html'); // Adjust this path as needed for your main app
+        return res.redirect('https://transcendent-gumption-3d5eb6.netlify.app/index.html'); // Adjust this path as needed for your main app
     }
 
     try {
@@ -25,7 +25,7 @@ app.get('/share', async (req, res) => {
         if (!response.ok) {
             console.error(`TMDB API error: ${response.status} ${response.statusText}`);
             // Redirect to main app if TMDB data fetch fails
-            return res.redirect('/index.html'); // Adjust this path
+            return res.redirect('https://transcendent-gumption-3d5eb6.netlify.app/index.html'); // Adjust this path
         }
         const data = await response.json();
 
@@ -33,13 +33,13 @@ app.get('/share', async (req, res) => {
         const description = data.overview || 'Descubra e explore filmes e séries.';
         const imageUrl = data.poster_path 
             ? `${TMDB_IMAGE_BASE_URL}w500${data.poster_path}`
-            : 'p.png'; // Default image if no poster
+            : 'https://transcendent-gumption-3d5eb6.netlify.app/p.png'; // Default image if no poster, using absolute Netlify path
 
         // Construct the full URL for the current page for og:url
         const currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
 
         // Construct the redirect URL to your main client-side app
-        const redirectUrl = `/index.html?type=${type}&id=${id}&from_share=true`; // Adjust this path
+        const redirectUrl = `https://transcendent-gumption-3d5eb6.netlify.app/index.html?type=${type}&id=${id}&from_share=true`; // Adjust this path
 
         // Send an HTML response with meta tags and a JavaScript redirect
         res.send(`
@@ -77,7 +77,7 @@ app.get('/share', async (req, res) => {
     } catch (error) {
         console.error("Error generating meta tags or fetching TMDB data:", error);
         // Redirect to main app if an error occurs
-        res.redirect('/index.html'); // Adjust this path
+        res.redirect('https://transcendent-gumption-3d5eb6.netlify.app/index.html'); // Adjust this path
     }
 });
 
